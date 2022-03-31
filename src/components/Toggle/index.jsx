@@ -1,38 +1,33 @@
-import { EColorScheme } from '@/redux/css';
-import { useOwnTheme } from '@/styles/theme';
-import React from 'react';
-import {
-  StyledInput,
-  StyledLabelSwitch,
-  StyledSpan,
-  StyledTitle,
-} from './styled';
+import {StyledButtons, StyledContainer} from "./styled";
+import {ThemeProvider} from "styled-components";
+import {themes} from "../../theme";
+import {useState} from "react";
 
-interface ISwitchToggleProps {
-  title: string;
-}
+export const Toggle = ({ onChange, currentTheme }) => (
+    <StyledButtons>
+      <label>
+        <input type="radio" name="theme" value="dark" onChange={onChange} defaultChecked={currentTheme === 'dark'} /> Dark
+      </label>
+      <label>
+        <input type="radio" name="theme" value="light" onChange={onChange} defaultChecked={currentTheme === 'light'} /> Light
+      </label>
+    </StyledButtons>
+)
 
-export default function SwitchToggle({
-  title = '',
-}: ISwitchToggleProps): JSX.Element {
-  const [theme, themeToggle] = useOwnTheme();
-  const changeSwitch = function () {
-    themeToggle();
-  };
+export const ThemeToggle = ({ children, themeName }) => {
+  const defaultTheme = themeName === 'dark' ? themes.dark : themes.light;
+  const [theme, setTheme] = useState(defaultTheme)
+
+  const onChangeTheme = ({ target }) => {
+    setTheme(target.value === 'dark' ? themes.dark : themes.light)
+  }
 
   return (
-    <>
-      <StyledLabelSwitch>
-        <StyledInput
-          checked={theme === EColorScheme.NIGHT}
-          onChange={changeSwitch}
-          type="checkbox"
-        />
-        <StyledSpan/>
-      </StyledLabelSwitch>
-      {title.length > 0 && (
-        <StyledTitle onClick={changeSwitch}>{title}</StyledTitle>
-      )}
-    </>
-  );
+      <ThemeProvider theme={theme}>
+        <StyledContainer>
+          {children}
+          <Toggle onChange={onChangeTheme} currentTheme={themeName} />
+        </StyledContainer>
+      </ThemeProvider>
+  )
 }
