@@ -1,33 +1,39 @@
-import {StyledButtons, StyledContainer} from "./styled";
-import {ThemeProvider} from "styled-components";
-import {themes} from "../../theme";
-import {useState} from "react";
+import React, { useState } from 'react';
+import { ThemeProvider } from 'styled-components';
+import { StyledButtons, StyledContainer } from './styled';
+import themes from '../../constants/theme';
 
-export const Toggle = ({ onChange, currentTheme }) => (
+export function Toggle({ onChange, currentTheme }) {
+  return (
     <StyledButtons>
       <label>
-        <input type="radio" name="theme" value="dark" onChange={onChange} defaultChecked={currentTheme === 'dark'} /> Dark
+        <input type="radio" name="theme" value="dark" onChange={onChange} defaultChecked={currentTheme === 'dark'} />
+        {' '}
+        Dark
       </label>
       <label>
-        <input type="radio" name="theme" value="light" onChange={onChange} defaultChecked={currentTheme === 'light'} /> Light
+        <input type="radio" name="theme" value="light" onChange={onChange} defaultChecked={currentTheme === 'light'} />
+        {' '}
+        Light
       </label>
     </StyledButtons>
-)
+  );
+}
 
-export const ThemeToggle = ({ children, themeName }) => {
+export function ThemeToggle({ children, themeName }) {
   const defaultTheme = themeName === 'dark' ? themes.dark : themes.light;
-  const [theme, setTheme] = useState(defaultTheme)
+  const [theme, setTheme] = useState(defaultTheme);
 
   const onChangeTheme = ({ target }) => {
-    setTheme(target.value === 'dark' ? themes.dark : themes.light)
-  }
+    setTheme(target.value === 'dark' ? themes.dark : themes.light);
+  };
 
   return (
-      <ThemeProvider theme={theme}>
-        <StyledContainer>
-          {children}
-          <Toggle onChange={onChangeTheme} currentTheme={themeName} />
-        </StyledContainer>
-      </ThemeProvider>
-  )
+    <ThemeProvider theme={theme}>
+      <StyledContainer>
+        {children}
+        <Toggle onChange={onChangeTheme} currentTheme={themeName} />
+      </StyledContainer>
+    </ThemeProvider>
+  );
 }
